@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugiyama Portfolio</title>
+    <style>
+        /* --- 基本定義とカラーパレット（石と静寂） --- */
+        :root {
+            --bg-base: #F5F5F4;        /* stone-100（ベースカラー） */
+            --bg-card: #FFFFFF;        /* カード背景（純白） */
+            --text-main: #1C1917;      /* stone-900（メインテキスト） */
+            --text-muted: #78716C;     /* stone-500（メタ情報・サブテキスト） */
+            --stone-dark: #44403C;     /* stone-700（ヘッダー・アクセント） */
+            --stone-border: #E7E5E4;   /* stone-200（境界線） */
+            --stone-badge: #E7E5E4;    /* stone-200（バッジ背景） */
+            
+            /* フォントファミリーの定義 */
+            --font-sans: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            --font-serif: Georgia, Cambria, 'Times New Roman', Times, 'Yu Mincho', 'YuMincho', 'MS Mincho', serif;
+        }
+
+        body {
+            font-family: var(--font-serif); /* デフォルトは明朝体 */
+            line-height: 1.8;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-base);
+        }
+
+        /* --- UI要素・メタ情報：Sans-serif（ゴシック） --- */
+        header, 
+        footer, 
+        .project-subtitle, 
+        .tech-badge, 
+        .links a, 
+        .section-label {
+            font-family: var(--font-sans);
+        }
+
+        header {
+            background-color: #000000; /* var(--stone-dark); */
+            color: #FFFFFF;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        header p {
+            margin-top: 12px;
+            font-size: 1.05em;
+            opacity: 0.85;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--stone-border);
+            margin-bottom: 50px;
+            padding: 40px;
+        }
+
+        /* --- タイトル・本文：Serif（明朝体） --- */
+        .project-title {
+            font-family: var(--font-serif);
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .project-subtitle {
+            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* --- 画像ギャラリーのスタイル設定 --- */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 横に3つ並べる */
+            gap: 16px;                            /* 画像間の隙間 */
+            margin: 24px 0;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 10;                /* 画像の比率を統一（お好みで調整してください） */
+            object-fit: cover;                    /* 比率を保ったまま領域を埋める */
+            border-radius: 4px;
+            border: 1px solid var(--stone-border);
+            display: block;
+        }
+
+        /* 画面が狭い（スマホなど）ときは縦並びにする */
+        @media (max-width: 600px) {
+            .image-gallery {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        .concept {
+            background-color: var(--bg-base);
+            border-left: 3px solid var(--stone-dark);
+            padding: 20px;
+            margin-bottom: 24px;
+            font-size: 0.95em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .feature-list {
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+
+        .feature-list li {
+            margin-bottom: 10px;
+        }
+
+        /* --- UI要素（技術スタック・ボタン）：Sans-serif（ゴシック） --- */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .tech-badge {
+            background-color: var(--stone-badge);
+            color: var(--stone-dark);
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .links {
+            margin-top: 24px;
+        }
+
+        .links a {
+            display: inline-block;
+            background-color: var(--stone-dark);
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            margin-right: 12px;
+            font-size: 0.9em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
+
+        .links a:hover {
+            opacity: 0.85;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Knot Portfolio</h1>
+    <p>『記憶』と『アート』を融合させる開発録</p>
+</header>
+
+<div class="container">
+
+    <div class="project-card">
+        <h2 class="project-title">Knot (Memo)</h2>
+        <div class="project-subtitle">記憶に出会う思考整理アプリケーション</div>
+        
+        <div class="image-gallery">
+            <img src="knot-1.png" alt="Knot 画面1" class="gallery-img">
+            <img src="knot-2.png" alt="Knot 画面2" class="gallery-img">
+            <img src="knot-3.png" alt="Knot 画面3" class="gallery-img">
+        </div>
+        
+        <div class="concept">
+            <strong>コンセプト: 「あなたの埋もれたメモは、AIの文章より価値がある」</strong><br>
+            メモを「消費」するものではなく「思考と対話」するものと定義し、過去メモを繋ぐセレンディピティと深い内省を最優先するアプリ。
+        </div>
+
+        <p>「THINK (論理的思考)」と「FEEL (感覚的アプローチ)」の2つの世界観。AIによるベクトル検索を用いた過去の思考との「共鳴表示」や、思考を俯瞰するキャンバス画面などを備えています。</p>
+
+        <ul class="feature-list">
+            <li><strong>THINKモード:</strong> 思考の整理・構造化に特化。リスト、MAP、BOARD(自由配置・手書きSVG)などのビューを搭載。</li>
+            <li><strong>FEELモード:</strong> アート・ギャラリー空間。過去の思考へ無意識にリンク。視覚表現で受動的に味わう。</li>
+            <li><strong>AI:</strong> テキストのベクトル化、スコアリング。関連メモや反論メモを検索。</li>
+            
+        </ul>
+
+        <div class="tech-stack">
+            <span class="tech-badge">タグ</span>
+            <span class="tech-badge">関連検索</span>
+            <span class="tech-badge">反論表示</span>
+            <span class="tech-badge">手書きボード</span>
+            <span class="tech-badge">アート表示</span>
+            <span class="tech-badge">俯瞰表示</span>
+            <span class="tech-badge">エクスポート</span>
+            <!-- <span class="tech-badge">React</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Vite</span>
+            <span class="tech-badge">Supabase (pgvector)</span>
+            <span class="tech-badge">OpenAI API</span>
+            <span class="tech-badge">@use-gesture/react</span>
+            <span class="tech-badge">Tailwind CSS</span> -->
+        </div>
+
+        <div class="links">
+            <a href="#">紹介サイトを見る</a>
+            <a href="https://github.com/sugiyama-po/knot" target="_blank">無料で試す</a>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <h2 class="project-title">knot books</h2>
+        <div class="project-subtitle">個人の読書管理・図書館連携アプリケーション</div>
+        
+        <div class="image-gallery">
+            <img src="books-1.png" alt="knot books 画面1" class="gallery-img">
+            <img src="books-2.png" alt="knot books 画面2" class="gallery-img">
+            <img src="books-3.png" alt="knot books 画面3" class="gallery-img">
+        </div>
+
+        <div class="concept">
+            <strong>コンセプト: 「図書館検索を便利に。埋もれた「読みたい」を繋ぐ」</strong><br>
+            カーリルに埋もれていく「読みたい本」。読みたい気持ちをを繋ぐアプリ。
+        </div>
+        
+        <p>「Knot」の思想を受け継ぎ、本の登録・ステータス管理・フォルダ整理・図書館の貸出状況確認ができる読書管理アプリです。こちらも「THINK」と「FEEL」の2つのモードを備えています。</p>
+
+        <ul class="feature-list">
+            <li><strong>外部API連携:</strong> 楽天Books API(蔵書検索)とCalil API(図書館蔵書確認)を統合。</li>
+            <li><strong>THINKモード:</strong> 4択の蔵書状況フィルター(蔵書あり/なし/貸出可など)を備えた高度な管理・検索UI.</li>
+            <li><strong>FEELモード:</strong> アート・ギャラリー空間。過去の読みたい記憶へリンクします。視覚表現で受動的に味わう。</li>
+            
+        </ul>
+
+        <div class="tech-stack">
+            <span class="tech-badge">カーリル図書館検索</span>
+            <span class="tech-badge">タグ管理</span>
+            <span class="tech-badge">本棚管理</span>
+            <span class="tech-badge">図書館登録</span>
+            <span class="tech-badge">感想管理</span>
+            <span class="tech-badge">動機管理</span>
+            
+            <!-- <span class="tech-badge">React</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Vite</span>
+            <span class="tech-badge">Supabase</span>
+            <span class="tech-badge">Stripe</span>
+            <span class="tech-badge">matter-js</span>
+            <span class="tech-badge">Vercel</span> -->
+        </div>
+
+        <div class="links">
+            <a href="#">紹介サイトを見る</a>
+            <a href="https://github.com/sugiyama-po/knot-books" target="_blank">無料で試す</a>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2026 Tatsuya Sugiyama.
+</footer>
+
+</body>
+</html>

@@ -1,305 +1,603 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sugiyama Portfolio</title>
-    <style>
-        /* --- 基本定義とカラーパレット（石と静寂） --- */
-        :root {
-            --bg-base: #F5F5F4;        /* stone-100（ベースカラー） */
-            --bg-card: #FFFFFF;        /* カード背景（純白） */
-            --text-main: #1C1917;      /* stone-900（メインテキスト） */
-            --text-muted: #78716C;     /* stone-500（メタ情報・サブテキスト） */
-            --stone-dark: #44403C;     /* stone-700（ヘッダー・アクセント） */
-            --stone-border: #E7E5E4;   /* stone-200（境界線） */
-            --stone-badge: #E7E5E4;    /* stone-200（バッジ背景） */
-            
-            /* フォントファミリーの定義 */
-            --font-sans: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-            --font-serif: Georgia, Cambria, 'Times New Roman', Times, 'Yu Mincho', 'YuMincho', 'MS Mincho', serif;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>knot — T.Sugiyama</title>
+<meta name="description" content="記憶とアートを融合させる個人開発の記録。メモアプリ「knot」と読書管理アプリ「knot books」。" />
 
-        body {
-            font-family: var(--font-serif); /* デフォルトは明朝体 */
-            line-height: 1.8;
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-base);
-        }
+<!-- OGP -->
+<meta property="og:title" content="knot — T.Sugiyama" />
+<meta property="og:description" content="記憶とアートを融合させる個人開発の記録。" />
+<meta property="og:type" content="website" />
 
-        /* --- UI要素・メタ情報：Sans-serif（ゴシック） --- */
-        header, 
-        footer, 
-        .project-subtitle, 
-        .tech-badge, 
-        .links a, 
-        .section-label {
-            font-family: var(--font-sans);
-        }
+<style>
+  :root {
+    --bg-base:    #fcfaf7;  /* 生成りの静寂 */
+    --bg-card:    #ffffff;
+    --bg-ink:     #000000;  /* 黒の対比 */
+    --text-main:  #1c1917;  /* stone-900 */
+    --text-muted: #78716c;  /* stone-500 */
+    --text-faint: #a8a29e;  /* stone-400 */
+    --stone-200:  #e7e5e4;
+    --stone-700:  #44403c;
+    --stone-800:  #292524;
 
-        header {
-            background-color: #000000; /* var(--stone-dark); */
-            color: #FFFFFF;
-            padding: 60px 20px;
-            text-align: center;
-        }
+    --font-sans:  'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    --font-serif: Georgia, Cambria, 'Times New Roman', Times, 'Yu Mincho', 'YuMincho', 'MS Mincho', serif;
+  }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.2em;
-            letter-spacing: 3px;
-            font-weight: 400;
-        }
+  * { box-sizing: border-box; }
 
-        header p {
-            margin-top: 12px;
-            font-size: 1.05em;
-            opacity: 0.85;
-            letter-spacing: 1px;
-            text-align: center;
-        }
+  html { scroll-behavior: smooth; }
 
-        .container {
-            max-width: 840px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
+  body {
+    margin: 0;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.02em;
+    selection-color: var(--stone-200);
+  }
+  ::selection { background: var(--stone-200); }
 
-        .project-card {
-            background: var(--bg-card);
-            border-radius: 8px;
-            border: 1px solid var(--stone-border);
-            margin-bottom: 50px;
-            padding: 40px;
-        }
+  /* ── ナビ ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: rgba(252, 250, 247, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  nav .brand {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-size: 1.25rem;
+    color: var(--text-main);
+  }
+  nav .nav-link {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-main);
+    border: 1px solid var(--text-main);
+    padding: 8px 18px;
+    border-radius: 999px;
+    transition: all 0.25s;
+  }
+  nav .nav-link:hover { background: var(--text-main); color: #fff; }
 
-        /* --- タイトル・本文：Serif（明朝体） --- */
-        .project-title {
-            font-family: var(--font-serif);
-            font-size: 1.8em;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-top: 0;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
+  /* ── セクション共通 ── */
+  section {
+    padding: 120px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .inner { width: 100%; max-width: 384px; margin: 0 auto; }
 
-        .project-subtitle {
-            font-weight: 500;
-            color: var(--text-muted);
-            font-size: 0.9em;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
+  .label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    display: block;
+    margin-bottom: 28px;
+  }
 
-        /* --- 画像ギャラリーのスタイル設定 --- */
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 横に3つ並べる */
-            gap: 16px;                            /* 画像間の隙間 */
-            margin: 24px 0;
-        }
+  /* ── HERO ── */
+  .hero { min-height: 100vh; justify-content: center; }
+  .hero h1 {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-size: clamp(5rem, 28vw, 9rem);
+    margin: 0 0 24px;
+    color: var(--text-main);
+    line-height: 0.9;
+  }
+  .hero .lead {
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    line-height: 2.2;
+    color: var(--text-main);
+    margin: 0;
+  }
+  .hero .sub {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-top: 56px;
+  }
+  .bounce {
+    margin-top: 72px;
+    color: var(--text-faint);
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
 
-        .gallery-img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 16;                /* 画像の比率を統一（お好みで調整してください） */
-            object-fit: cover;                    /* 比率を保ったまま領域を埋める */
-            border-radius: 4px;
-            border: 1px solid var(--stone-border);
-            display: block;
-        }
+  /* ── 黒の対比セクション ── */
+  .ink { background: var(--bg-ink); color: #f5f5f4; }
+  .ink h2 { color: #f5f5f4; }
+  .ink p  { color: var(--text-faint); }
+  .divider { width: 1px; height: 28px; background: var(--stone-700); margin: 32px auto; }
 
-        /* 画面が狭い（スマホなど）ときは縦並びにする */
-        @media (max-width: 600px) {
-            .image-gallery {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-        }
+  h2.title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    line-height: 1.7;
+    margin: 0 0 20px;
+  }
+  .quiet {
+    font-size: 0.8rem;
+    line-height: 2.2;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+  .ink .quiet { color: var(--text-faint); }
+  .text-left  { text-align: left; }
+  .text-right { text-align: right; }
 
-        .concept {
-            background-color: var(--bg-base);
-            border-left: 3px solid var(--stone-dark);
-            padding: 20px;
-            margin-bottom: 24px;
-            font-size: 0.95em;
-        }
+  /* ── アプリ紹介ブロック ── */
+  .app { background: var(--bg-card); }
+  .app.alt { background: var(--bg-base); }
 
-        p {
-            margin-bottom: 20px;
-            text-align: justify;
-        }
+  .app .heading {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: 0em;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 0 0 8px;
+  }
+  .app .tagline {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 40px;
+  }
 
-        .feature-list {
-            padding-left: 20px;
-            margin-bottom: 30px;
-        }
+  /* 代表ビジュアル */
+  .visual {
+    width: 100%;
+    max-width: 384px;
+    aspect-ratio: 4 / 5;
+    background: var(--stone-200);
+    border: 1px solid var(--stone-200);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 auto 32px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .feature-list li {
-            margin-bottom: 10px;
-        }
+  /* 横スワイプ・カルーセル（親の padding 制限を超えて画面幅いっぱいに） */
+  .carousel-wrap {
+    width: 100%;
+    margin: 0 0 24px;
+  }
+  .carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 24px 8px;
+    scrollbar-width: none;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .slide {
+    flex: 0 0 82%;
+    max-width: 384px;
+    scroll-snap-align: center;
+  }
+  .slide .frame {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--stone-200);
+    border: 1px solid var(--stone-200);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .slide .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* インジケーター */
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 40px;
+  }
+  .dots i { width: 16px; height: 2px; background: var(--stone-200); display: block; }
 
-        /* --- UI要素（技術スタック・ボタン）：Sans-serif（ゴシック） --- */
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 28px;
-        }
+  /* コンセプト引用 */
+  .concept {
+    max-width: 384px;
+    margin: 0 auto 40px;
+    text-align: left;
+    border-left: 2px solid var(--text-main);
+    padding: 4px 0 4px 20px;
+  }
+  .concept strong {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 10px;
+    line-height: 1.8;
+  }
+  .concept span {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 2;
+  }
 
-        .tech-badge {
-            background-color: var(--stone-badge);
-            color: var(--stone-dark);
-            padding: 4px 14px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
+  /* 機能の縦リスト（詩的に） */
+  .features {
+    max-width: 384px;
+    margin: 0 auto 40px;
+    list-style: none;
+    padding: 0;
+    text-align: left;
+  }
+  .features li {
+    font-size: 0.82rem;
+    line-height: 2;
+    color: var(--text-muted);
+    padding: 14px 0;
+    border-top: 1px solid var(--stone-200);
+    letter-spacing: 0.04em;
+  }
+  .features li:last-child { border-bottom: 1px solid var(--stone-200); }
+  .features li b {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
 
-        .links {
-            margin-top: 24px;
-        }
+  /* バッジ群 */
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 384px;
+    margin: 0 auto 40px;
+  }
+  .badge {
+    font-family: var(--font-sans);
+    background: var(--stone-200);
+    color: var(--stone-700);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 5px 14px;
+    border-radius: 4px;
+  }
 
-        .links a {
-            display: inline-block;
-            background-color: var(--stone-dark);
-            color: #FFFFFF;
-            text-decoration: none;
-            padding: 10px 24px;
-            border-radius: 4px;
-            margin-right: 12px;
-            font-size: 0.9em;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: opacity 0.2s;
-        }
+  /* リンクボタン */
+  .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .links a {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    padding: 11px 26px;
+    border-radius: 4px;
+    transition: all 0.25s;
+  }
+  .links a.primary { background: var(--text-main); color: #fff; }
+  .links a.primary:hover { background: var(--stone-800); }
+  .links a.ghost { color: var(--text-main); border: 1px solid var(--stone-200); }
+  .links a.ghost:hover { border-color: var(--text-main); }
 
-        .links a:hover {
-            opacity: 0.85;
-        }
+  /* ── フッター ── */
+  footer {
+    border-top: 1px solid var(--stone-200);
+    background: var(--bg-base);
+    padding: 64px 24px;
+    text-align: center;
+  }
+  footer .mark {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 28px;
+  }
+  footer .flinks {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  footer .flinks a {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  footer .flinks a:hover { color: var(--text-main); }
+  footer .copy { font-size: 10px; color: var(--text-faint); }
 
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-size: 0.85em;
-            letter-spacing: 1px;
-        }
-    </style>
+  /* 浮遊CTA */
+  .fab {
+    position: fixed;
+    bottom: 28px; right: 24px;
+    z-index: 50;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    background: var(--text-main);
+    padding: 13px 22px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    transition: all 0.25s;
+  }
+  .fab:hover { background: var(--stone-700); box-shadow: 0 10px 28px rgba(0,0,0,0.22); transform: translateY(-1px); }
+  .fab:active { transform: scale(0.96); }
+</style>
 </head>
 <body>
 
-<header>
-    <h1>Knot Portfolio</h1>
-    <p>『記憶』と『アート』を融合させる開発録</p>
-</header>
+<nav>
+  <span class="brand">knot</span>
+  <div style="display:flex; gap:10px;">
+    <a class="nav-link" href="https://knot-books.vercel.app/" target="_blank" rel="noopener">Books</a>
+    <a class="nav-link" href="https://forest-of-thought.vercel.app/" target="_blank" rel="noopener">Memo</a>
+  </div>
+</nav>
 
-<div class="container">
-
-    <div class="project-card">
-        <h2 class="project-title">Knot (Memo)</h2>
-        <div class="project-subtitle">記憶に出会う思考整理アプリケーション</div>
-        
-        <div class="image-gallery">
-            <img src="knot-1.png" alt="Knot 画面1" class="gallery-img">
-            <img src="knot-2.png" alt="Knot 画面2" class="gallery-img">
-            <img src="knot-3.png" alt="Knot 画面3" class="gallery-img">
-        </div>
-        
-        <div class="concept">
-            <strong>コンセプト: 「あなたの埋もれたメモは、AIの文章より価値がある」</strong><br>
-            メモを「消費」するものではなく「思考と対話」するものと定義し、過去メモを繋ぐセレンディピティと深い内省を最優先するアプリ。
-        </div>
-
-        <p>「THINK (論理的思考)」と「FEEL (感覚的アプローチ)」の2つの世界観。AIによるベクトル検索を用いた過去の思考との「共鳴表示」や、思考を俯瞰するキャンバス画面などを備えています。</p>
-
-        <ul class="feature-list">
-            <li><strong>THINKモード:</strong> 思考の整理・構造化に特化。リスト、MAP、BOARD(自由配置・手書きSVG)などのビューを搭載。</li>
-            <li><strong>FEELモード:</strong> アート・ギャラリー空間。過去の思考へ無意識にリンク。視覚表現で受動的に味わう。</li>
-            <li><strong>AI:</strong> テキストのベクトル化、スコアリング。関連メモや反論メモを検索。</li>
-            
-        </ul>
-
-        <div class="tech-stack">
-            <span class="tech-badge">タグ</span>
-            <span class="tech-badge">関連検索</span>
-            <span class="tech-badge">反論表示</span>
-            <span class="tech-badge">手書きボード</span>
-            <span class="tech-badge">アート表示</span>
-            <span class="tech-badge">俯瞰表示</span>
-            <span class="tech-badge">エクスポート</span>
-            <!-- <span class="tech-badge">React</span>
-            <span class="tech-badge">TypeScript</span>
-            <span class="tech-badge">Vite</span>
-            <span class="tech-badge">Supabase (pgvector)</span>
-            <span class="tech-badge">OpenAI API</span>
-            <span class="tech-badge">@use-gesture/react</span>
-            <span class="tech-badge">Tailwind CSS</span> -->
-        </div>
-
-        <div class="links">
-            <a href="https://quasar-cornucopia-474.notion.site/Knot-32d84bff5cef82a2850f017dfa1f660a">紹介サイトを見る</a>
-            <a href="https://forest-of-thought.vercel.app/" target="_blank">無料で試す</a>
-        </div>
+<!-- 01. HERO -->
+<section class="hero">
+  <div class="inner">
+    <h1>knot</h1>
+    <p class="lead">
+      記憶と、もう一度出会う。<br />
+      情報の墓場から<br />
+      セレンディピティへ。
+    </p>
+    <p class="sub">
+        Works 01 — knot_Books<br />
+        Works 02 — knot_Memo<br /><br />
+        A Portfolio by T.Sugiyama</p>
+    <div class="bounce">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M7 13L12 18L17 13" />
+        <path d="M12 18L12 6" />
+      </svg>
     </div>
+  </div>
+</section>
 
-    <div class="project-card">
-        <h2 class="project-title">knot books</h2>
-        <div class="project-subtitle">個人の読書管理・図書館連携アプリケーション</div>
-        
-        <div class="image-gallery">
-            <img src="books-1.png" alt="knot books 画面1" class="gallery-img">
-            <img src="books-2.png" alt="knot books 画面2" class="gallery-img">
-            <img src="books-3.png" alt="knot books 画面3" class="gallery-img">
-        </div>
+<!-- 02. CONCEPT（黒の対比） -->
+<section class="ink">
+  <div class="inner">
+    <h2 class="title text-left">
+      整理のための道具を、<br />
+      つくっているのではない。
+    </h2>
+    <p class="quiet text-left">
+      検索すれば、答えはすぐ手に入る時代。<br />
+      けれど、あなたが時間をかけて残した言葉や、<br />
+      読みたいと願った一冊は、<br />
+      整理された棚の奥で静かに眠っていく。
+    </p>
+    <div class="divider"></div>
+    <h2 class="title text-right">
+      眠ったものと、<br />
+      もう一度出会うために。
+    </h2>
+    <p class="quiet text-right">
+      論理で整える「THINK」と、<br />
+      感覚で味わう「FEEL」。<br />
+      二つの世界を行き来しながら、<br />
+      忘れていた自分の記憶へ還っていく。
+    </p>
+  </div>
+</section>
 
-        <div class="concept">
-            <strong>コンセプト: 「図書館検索を便利に。埋もれた「読みたい」を繋ぐ」</strong><br>
-            カーリルに埋もれていく「読みたい本」。読みたい気持ちをを繋ぐアプリ。
-        </div>
-        
-        <p>「Knot」の思想を受け継ぎ、本の登録・ステータス管理・フォルダ整理・図書館の貸出状況確認ができる読書管理アプリです。こちらも「THINK」と「FEEL」の2つのモードを備えています。</p>
+<!-- 03. knot books -->
+<section class="app" id="books">
+  <div class="inner">
+    <span class="label">Works 01 —Reading App</span>
+    <h2 class="heading">knot_Books</h2>
+    <p class="tagline">読書管理・図書館連携アプリケーション</p>
+  </div>
 
-        <ul class="feature-list">
-            <li><strong>外部API連携:</strong> 楽天Books API(蔵書検索)とCalil API(図書館蔵書確認)を統合。</li>
-            <li><strong>THINKモード:</strong> 4択の蔵書状況フィルター(蔵書あり/なし/貸出可など)を備えた高度な管理・検索UI.</li>
-            <li><strong>FEELモード:</strong> アート・ギャラリー空間。過去の読みたい記憶へリンクします。視覚表現で受動的に味わう。</li>
-            
-        </ul>
-
-        <div class="tech-stack">
-            <span class="tech-badge">カーリル図書館検索</span>
-            <span class="tech-badge">タグ管理</span>
-            <span class="tech-badge">本棚管理</span>
-            <span class="tech-badge">図書館登録</span>
-            <span class="tech-badge">感想管理</span>
-            <span class="tech-badge">動機管理</span>
-            
-            <!-- <span class="tech-badge">React</span>
-            <span class="tech-badge">TypeScript</span>
-            <span class="tech-badge">Vite</span>
-            <span class="tech-badge">Supabase</span>
-            <span class="tech-badge">Stripe</span>
-            <span class="tech-badge">matter-js</span>
-            <span class="tech-badge">Vercel</span> -->
-        </div>
-
-        <div class="links">
-            <a href="https://quasar-cornucopia-474.notion.site/knot_Books-36984bff5cef806c935ef647f3cabee1">紹介サイトを見る</a>
-            <a href="https://knot-books.vercel.app/" target="_blank">無料で試す</a>
-        </div>
+  <div class="carousel-wrap">
+    <div class="carousel">
+      <div class="slide"><div class="frame">
+        <img src="books-1.png" alt="knot books 画面1"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot+books';" />
+      </div></div>
+      <div class="slide"><div class="frame">
+        <img src="books-2.png" alt="knot books 画面2"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot+books';" />
+      </div></div>
+      <div class="slide"><div class="frame">
+        <img src="books-3.png" alt="knot books 画面3"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot+books';" />
+      </div></div>
     </div>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
 
-</div>
+  <div class="concept">
+    <strong>埋もれていく「読みたい」を、もう一度。</strong>
+    <span>登録したまま忘れてしまう一冊。その本と再会し、近くの図書館で今すぐ借りられるかまで繋ぐ読書管理アプリ。</span>
+  </div>
+
+  <ul class="features">
+    <li>
+      <b>Library</b>
+      現在地や地域から図書館を検索して登録。蔵書・貸出状況の確認から予約ページまで、カーリル連携でひと続きに。
+    </li>
+    <li>
+      <b>Think Mode</b>
+      ステータス・評価・タグ（AND/OR）・蔵書状況の4択フィルターで、自分の本棚を精密に手繰る。
+    </li>
+    <li>
+      <b>Feel Mode</b>
+      忘れていた本が深層から浮かび上がる。流れる・地層・残像・浮上——感覚で記憶と再会するアートの空間。
+    </li>
+    <li>
+      <b>Gallery</b>
+      選んだ本を、モノトーンの一枚に。そのままSNSへ共有できる静かなビジュアルを生成。
+    </li>
+  </ul>
+
+  <div class="badges">
+    <span class="badge">カーリル図書館連携</span>
+    <span class="badge">蔵書・貸出確認</span>
+    <span class="badge">タグ / 評価管理</span>
+    <span class="badge">本棚整理</span>
+    <span class="badge">動機・感想記録</span>
+    <span class="badge">ギャラリー共有</span>
+  </div>
+
+  <div class="links">
+    <a class="primary" href="https://knot-books.vercel.app/" target="_blank" rel="noopener">無料で試す</a>
+    <a class="ghost" href="https://quasar-cornucopia-474.notion.site/knot_Books-36984bff5cef806c935ef647f3cabee1" target="_blank" rel="noopener">紹介サイト</a>
+  </div>
+</section>
+
+<!-- 接続テキスト（黒） -->
+<section class="ink">
+  <div class="inner">
+    <p class="quiet text-left" style="margin-bottom:40px;">
+      整理されたフォルダの中に、<br />
+      新しい発見は生まれない。
+    </p>
+    <h2 class="title text-right">
+      もうひとつの、<br />
+      記憶との対話。
+    </h2>
+  </div>
+</section>
+
+<!-- 04. knot (Memo) -->
+<section class="app alt" id="memo">
+  <div class="inner">
+    <span class="label">Works 02 — Thinking App</span>
+    <h2 class="heading">knot_Memo</h2>
+    <p class="tagline">記憶に出会う、思考整理メモアプリ</p>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel">
+      <div class="slide"><div class="frame">
+        <img src="knot-1.png" alt="knot 画面1"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot';" />
+      </div></div>
+      <div class="slide"><div class="frame">
+        <img src="knot-2.png" alt="knot 画面2"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot';" />
+      </div></div>
+      <div class="slide"><div class="frame">
+        <img src="knot-3.png" alt="knot 画面3"
+             onerror="this.src='https://placehold.co/600x750/f5f5f4/a8a29e?text=knot';" />
+      </div></div>
+    </div>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="concept">
+    <strong>埋もれたメモは、AIの文章より価値がある。</strong>
+    <span>メモは「消費」ではなく「思考との対話」。過去の自分の言葉と出会い直す、セレンディピティのための装置。</span>
+  </div>
+
+  <ul class="features">
+    <li>
+      <b>Think Mode</b>
+      リスト・MAP（相関図）・BOARD（手書きSVGの自由配置）・WALK。思考を整理し、構造として俯瞰する。
+    </li>
+    <li>
+      <b>Feel Mode</b>
+      崩壊・落下・傾聴・再生——過去の思考へ無意識にリンクする、受動的に味わうアートの空間。
+    </li>
+    <li>
+      <b>AI Resonance</b>
+      テキストをベクトル化し、関連するメモや、あえての「反対意見」を過去から呼び起こす共鳴検索。
+    </li>
+  </ul>
+
+  <div class="badges">
+    <span class="badge">AI共鳴検索</span>
+    <span class="badge">反論表示</span>
+    <span class="badge">手書きボード</span>
+    <span class="badge">俯瞰MAP</span>
+    <span class="badge">アート表示</span>
+    <span class="badge">エクスポート</span>
+  </div>
+
+  <div class="links">
+    <a class="primary" href="https://forest-of-thought.vercel.app/" target="_blank" rel="noopener">無料で試す</a>
+    <a class="ghost" href="https://quasar-cornucopia-474.notion.site/Knot-32d84bff5cef82a2850f017dfa1f660a" target="_blank" rel="noopener">紹介サイト</a>
+  </div>
+</section>
+
+<!-- 05. まとめ（黒） -->
+<section class="ink">
+  <div class="inner">
+    <h2 class="title text-left">
+      いつもの自分と、<br />
+      いつかの自分。
+    </h2>
+    <p class="quiet text-left">
+      どちらのアプリにも、整理だけが目的のフォルダはありません。<br /><br />
+      あなたの言葉と、あなたが選んだ一冊を<br />
+      「情報の墓場」から救い出す。<br />
+      あなた自身に、あなたを結びなおす（knot）ための空間です。
+    </p>
+  </div>
+</section>
 
 <footer>
-    &copy; 2026 Tatsuya Sugiyama.
+  <div class="mark">knot — works by T.Sugiyama</div>
+  <div class="flinks">
+    <a href="https://quasar-cornucopia-474.notion.site/knot_Books-36984bff5cef806c935ef647f3cabee1" target="_blank" rel="noopener">knot books</a>
+    <a href="https://quasar-cornucopia-474.notion.site/Knot-32d84bff5cef82a2850f017dfa1f660a" target="_blank" rel="noopener">knot memo</a>
+    <a href="https://quasar-cornucopia-474.notion.site/35684bff5cef8075bc73eef793dc5bc9" target="_blank" rel="noopener">開発のきっかけ</a>
+  </div>
+  <div class="copy">© 2026 T.Sugiyama</div>
 </footer>
+
+<a class="fab" href="https://knot-books.vercel.app/" target="_blank" rel="noopener">無料で試す</a>
 
 </body>
 </html>

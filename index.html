@@ -213,16 +213,28 @@
     scroll-snap-align: center;
   }
   .slide .frame {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    background: var(--stone-200);
-    border: 1px solid var(--stone-200);
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  }
-  .slide .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  /* インジケーター */
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #ffffff;
+  border: 1px solid #d6d3d1;          /* stone-300：背景よりはっきり濃い縁 */
+  border-radius: 8px;
+  overflow: hidden;
+  /* padding: 6px;                        画像の周りに白い余白（額縁効果） */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
+}
+/* .slide .frame img { border-radius: 4px; }  余白の内側で角丸を合わせる */
+
+/* .slide .frame {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: var(--stone-200);
+  border: 1px solid var(--stone-200);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+} */
+
+   /* インジケーター */
   .dots {
     display: flex;
     justify-content: center;
@@ -408,8 +420,8 @@
 <section class="ink">
   <div class="inner">
     <h2 class="title text-left">
-      整理のための道具を、<br />
-      つくっているのではない。
+      整理や生成ではない、<br />
+      再会と発見。
     </h2>
     <p class="quiet text-left">
       検索すれば、答えはすぐ手に入る時代。<br />
@@ -437,6 +449,15 @@
     <span class="label">Works 01 —Reading App</span>
     <h2 class="heading">knot_Books</h2>
     <p class="tagline">読書管理・図書館連携アプリケーション</p>
+  </div>
+
+  <div class="badges">
+    <span class="badge">カーリル図書館連携</span>
+    <span class="badge">蔵書・貸出確認</span>
+    <span class="badge">タグ / 評価管理</span>
+    <span class="badge">本棚整理</span>
+    <span class="badge">動機・感想記録</span>
+    <span class="badge">ギャラリー共有</span>
   </div>
 
   <div class="carousel-wrap">
@@ -516,6 +537,15 @@
     <span class="label">Works 02 — Thinking App</span>
     <h2 class="heading">knot_Memo</h2>
     <p class="tagline">記憶に出会う、思考整理メモアプリ</p>
+  </div>
+
+   <div class="badges">
+    <span class="badge">AI共鳴検索</span>
+    <span class="badge">反論表示</span>
+    <span class="badge">手書きボード</span>
+    <span class="badge">俯瞰MAP</span>
+    <span class="badge">アート表示</span>
+    <span class="badge">エクスポート</span>
   </div>
 
   <div class="carousel-wrap">
